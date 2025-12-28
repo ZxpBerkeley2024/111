@@ -1,0 +1,862 @@
+<!-- Aurora Crystal Homepage (FIXED: full-screen hero bg, 3-slide, no top nav) -->
+
+<style>
+  /* Hide Shopify default header/announcement on homepage */
+  #shopify-section-announcement-bar,
+  #shopify-section-header,
+  .shopify-section-group-header,
+  .shopify-section--announcement-bar,
+  .announcement-bar,
+  .header-wrapper,
+  .header,
+  header[role="banner"] {
+    display: none !important;
+  }
+
+  /* Base */
+  .aurora-wrapper * { box-sizing: border-box; }
+  .aurora-full-width {
+    position: relative;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+  }
+  .aurora-page {
+    min-height: 100vh;
+    background: #000;
+    color: #18181b;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "Helvetica Neue", Arial, sans-serif;
+  }
+  .aurora-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* HERO (IMPORTANT: bg is always full-screen and controlled by aurora-hero-bg) */
+  .aurora-hero { position: relative; padding-top: 0; }
+  .aurora-hero-bg {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    color: #fff;
+
+  /* 固定单张背景图 */
+    --hero-bg: url("https://cdn.shopify.com/s/files/1/0708/3393/0294/files/1F7470F3-FF7D-4630-9325-3390A1947CBB.jpg?v=1766881649");
+
+  /* ✅ 不叠加任何渐变滤镜：只用原图 */
+    background-image: var(--hero-bg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+
+  
+
+  /* Text block position */
+  .aurora-hero-inner {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24vh 16px 96px;   /* ← 想更靠上/下只改这里：22vh~28vh */
+    text-align: center;
+  }
+
+  .aurora-hero-tag {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .aurora-hero-title {
+    margin-top: 12px;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    font-size: 24px;
+  }
+  @media (min-width: 640px) { .aurora-hero-title { font-size: 28px; } }
+  @media (min-width: 768px) { .aurora-hero-title { font-size: 32px; } }
+
+  .aurora-hero-subtitle {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+
+  .aurora-hero-ctas {
+    margin-top: 24px;
+    display: inline-flex;
+    gap: 24px;
+    font-size: 14px;
+  }
+  .aurora-link-underline {
+    background: none;
+    border: none;
+    padding: 0 0 4px;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.8);
+  }
+  .aurora-link-underline.secondary {
+    border-bottom-color: rgba(255,255,255,0.6);
+    opacity: 0.85;
+  }
+
+  .aurora-metrics {
+    margin-top: 32px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    font-size: 11px;
+    opacity: 0.75;
+    flex-wrap: wrap;
+  }
+
+  /* Dots */
+  .aurora-hero-indicators {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 5;
+  }
+  .aurora-hero-indicator {
+    height: 6px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.4);
+    width: 12px;
+  }
+  .aurora-hero-indicator.active {
+    width: 28px;
+    background: #fff;
+  }
+
+  /* ImgMock */
+  .aurora-imgmock {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%;
+    border-radius: 24px;
+    background: linear-gradient(to bottom right, #ffffff, #f4f4f5);
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  }
+  .aurora-imgmock--portrait { padding-bottom: 125%; }
+  .aurora-imgmock-blur-a,
+  .aurora-imgmock-blur-b {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(30px);
+  }
+  .aurora-imgmock-blur-a {
+    top: -40px; left: -40px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.9);
+  }
+  .aurora-imgmock-blur-b {
+    bottom: -60px; right: -40px;
+    width: 220px; height: 220px;
+    background: rgba(244,244,245,0.9);
+  }
+  .aurora-imgmock-square {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .aurora-imgmock-square-inner {
+    width: 80px; height: 80px;
+    border-radius: 16px;
+    border: 1px solid rgba(228,228,231,0.9);
+  }
+
+  /* Sections */
+  .aurora-section { padding: 80px 0; background: #fff; }
+  .aurora-section--tight { padding-top: 40px; padding-bottom: 40px; }
+
+  .aurora-campaign-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 24px;
+  }
+  @media (max-width: 900px) { .aurora-campaign-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 640px) { .aurora-campaign-grid { grid-template-columns: 1fr; } }
+  .aurora-campaign-card { display: flex; flex-direction: column; }
+  .aurora-campaign-meta {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .aurora-campaign-text { flex: 1; min-width: 0; }
+  .aurora-tag {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #4b5563;
+  }
+  .aurora-campaign-title {
+    margin-top: 4px;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #111827;
+    word-break: keep-all;
+    white-space: normal;
+  }
+  .aurora-ghost-btn {
+    border-radius: 999px;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .aurora-ghost-btn:hover { background: #f3f4f6; }
+
+  /* Products */
+  .aurora-products-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .aurora-section-title { font-size: 24px; line-height: 1.2; color: #111827; }
+  @media (min-width: 768px) { .aurora-section-title { font-size: 30px; } }
+
+  .aurora-text-link-pill {
+    border-radius: 999px;
+    font-size: 13px;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .aurora-text-link-pill:hover { background: #f3f4f6; }
+
+  .aurora-products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 24px;
+  }
+  @media (max-width: 900px) { .aurora-products-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 640px) { .aurora-products-grid { grid-template-columns: 1fr; } }
+
+  .aurora-product-card {
+    border-radius: 28px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease;
+  }
+  .aurora-product-card:hover { box-shadow: 0 10px 30px rgba(15,23,42,0.08); }
+
+  .aurora-badge {
+    position: absolute;
+    left: 12px; top: 12px;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  .aurora-product-meta {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .aurora-product-meta-text { flex: 1; min-width: 0; }
+  .aurora-product-name { margin-top: 4px; font-size: 14px; color: #111827; line-height: 1.5; }
+  .aurora-product-price { white-space: nowrap; font-size: 14px; color: #111827; }
+
+  .aurora-product-actions { margin-top: 16px; display: flex; gap: 8px; }
+  .aurora-primary-btn {
+    border-radius: 999px;
+    height: 36px;
+    padding: 0 16px;
+    border: none;
+    background: #111827;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  a.aurora-primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  a.aurora-primary-btn:visited {
+    color: #fff;
+  }
+  .aurora-primary-btn:hover { background: #020617; }
+  .aurora-secondary-btn {
+    border-radius: 999px;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .aurora-secondary-btn:hover { background: #f3f4f6; }
+
+  /* Craft / Story / Services / Footer */
+  .aurora-two-col {
+    display: grid;
+    grid-template-columns: minmax(0,1.1fr) minmax(0,1fr);
+    gap: 40px;
+    align-items: center;
+  }
+  @media (max-width: 900px) { .aurora-two-col { grid-template-columns: 1fr; } }
+
+  .aurora-body-text { margin-top: 24px; font-size: 14px; line-height: 1.8; color: #4b5563; }
+
+  .aurora-stat-grid {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 16px;
+    font-size: 12px;
+    color: #6b7280;
+    text-align: center;
+  }
+  .aurora-stat-card {
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    padding: 16px;
+    background: #fff;
+  }
+  .aurora-stat-title { font-size: 14px; color: #111827; margin-bottom: 4px; }
+
+  .aurora-story { text-align: center; }
+  .aurora-story p {
+    margin-top: 24px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #4b5563;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .aurora-services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 16px;
+  }
+  @media (max-width: 900px) { .aurora-services-grid { grid-template-columns: 1fr; } }
+
+  .aurora-service-card {
+    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    padding: 24px;
+    background: #fff;
+  }
+  .aurora-service-title { margin-top: 8px; font-size: 14px; color: #111827; }
+  .aurora-service-btn {
+    margin-top: 12px;
+    border-radius: 999px;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .aurora-service-btn:hover { background: #f3f4f6; }
+
+  .aurora-footer { border-top: 1px solid #f4f4f5; background: #fff; font-size: 14px; }
+  .aurora-footer-inner { padding: 48px 16px 32px; }
+  .aurora-footer-grid {
+    display: grid;
+    grid-template-columns: minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);
+    gap: 32px;
+  }
+  @media (max-width: 900px) { .aurora-footer-grid { grid-template-columns: 1fr; } }
+  .aurora-footer-brand { letter-spacing: 0.25em; text-transform: uppercase; font-size: 13px; color: #111827; }
+  .aurora-footer-text { margin-top: 16px; color: #6b7280; max-width: 320px; font-size: 14px; }
+  .aurora-footer-subscribe { margin-top: 16px; display: flex; gap: 8px; }
+  .aurora-input {
+    flex: 1;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  .aurora-footer-column-title { font-size: 14px; color: #111827; margin-bottom: 12px; }
+  .aurora-footer-list { list-style: none; margin: 0; padding: 0; color: #6b7280; font-size: 14px; }
+  .aurora-footer-list li + li { margin-top: 6px; }
+  .aurora-footer-bottom { padding-bottom: 32px; text-align: center; font-size: 12px; color: #9ca3af; }
+  .aurora-imgmock.has-real-img {
+    overflow: hidden;
+  }
+  .aurora-imgmock.has-real-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* ===== Footer layout fix ===== */
+  .aurora-footer {
+    border-top: 1px solid #f4f4f5;
+    background: #fff;
+  }
+
+  .aurora-footer-inner {
+    padding: 56px 16px 32px;
+  }
+
+/* 关键：让三列更均衡，避免左侧订阅把右侧挤爆 */
+  .aurora-footer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr; /* 原来 2fr 1fr 1fr 太夸张 */
+    gap: 48px;                             /* 拉开列间距 */
+    align-items: start;
+  }
+
+/* 左侧订阅区域宽度控制 */
+  .aurora-footer-text {
+    margin-top: 14px;
+    color: #6b7280;
+    max-width: 360px;
+  }
+
+/* 输入框+按钮：不允许溢出，输入框自动占满剩余 */
+  .aurora-footer-subscribe {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;  /* 输入框占满，按钮自适应 */
+    gap: 10px;
+    align-items: center;
+    max-width: 420px;                 /* 防止过长挤到右侧列 */
+  }
+
+  .aurora-input {
+    width: 100%;
+    min-width: 0;                     /* ✅ 关键：允许在 grid 内收缩，不会把别的列挤爆 */
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .aurora-footer-column-title {
+    font-size: 14px;
+    color: #111827;
+    margin-bottom: 12px;
+  }
+
+  .aurora-footer-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .aurora-footer-list li + li {
+    margin-top: 8px;
+  }
+
+  .aurora-footer-bottom {
+    padding: 18px 0 32px;
+    text-align: center;
+    font-size: 12px;
+    color: #9ca3af;
+  }
+
+/* 移动端：三列变一列，订阅不再挤压 */
+  @media (max-width: 900px) {
+    .aurora-footer-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .aurora-footer-subscribe {
+      max-width: 520px;
+    }
+  }
+    /* ===== Footer 更平整的微调（覆盖上一个版本） ===== */
+
+/* 让整体更均匀：左列不再太宽，右侧两列更宽一些 */
+  .aurora-footer-grid{
+    grid-template-columns: 1fr 0.9fr 0.9fr;
+    gap: 56px;
+  }
+
+/* 标题不要断行 */
+  .aurora-footer-column-title{
+    white-space: nowrap;
+    letter-spacing: 0.06em;   /* 更像奢侈品那种干净感 */
+    line-height: 1.2;
+  }
+
+/* 右侧列表不要被挤成竖排字：给它更舒服的行高 + 不强制断字 */
+  .aurora-footer-list{
+    line-height: 1.8;
+    word-break: keep-all;
+  }
+
+/* 左侧订阅区：输入框+按钮更整齐对齐 */
+  .aurora-footer-subscribe{
+    max-width: 460px;
+    grid-template-columns: 1fr 108px; /* 右侧按钮固定宽一点，视觉更齐 */
+  }
+
+/* 让按钮不挤文字且更居中 */
+  .aurora-footer-subscribe .aurora-primary-btn{
+    width: 108px;
+    justify-content: center;
+  }
+
+/* 输入框更“高级”，高度与按钮一致 */
+  .aurora-input{
+    height: 44px;
+  }
+
+/* 按钮高度统一 */
+  .aurora-primary-btn{
+    height: 44px;
+  }
+    /* ===== Mobile fixes (Hero + Product cards) ===== */
+@media (max-width: 768px) {
+  /* 1) Hero 在手机不要占满 100vh：减少断层感 */
+  .aurora-hero-bg {
+    min-height: 86vh;       /* 原来 100vh，手机缩短 */
+  }
+  .aurora-hero-inner {
+    min-height: 86vh;
+    padding: 18vh 16px 64px; /* 手机上把文字整体上移一点，底部留白更少 */
+  }
+
+  /* 指示点更贴近底部，别把下面内容顶出很大空白 */
+  .aurora-hero-indicators {
+    bottom: 14px;
+  }
+
+  /* 2) 产品卡片图片在手机别太“巨”：缩短图片比例 */
+  .aurora-imgmock--portrait {
+    padding-bottom: 92%;    /* 原 125% 太高，手机改成接近 1:1 */
+  }
+
+  /* 产品区上下留白稍微收紧（更像你第二张期望） */
+  .aurora-section {
+    padding: 48px 0;
+  }
+  .aurora-products-header {
+    margin-bottom: 16px;
+  }
+}
+    /* ===== Fix mobile right white gap (horizontal overflow) ===== */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  /* 关键：手机端不要用 100vw（会多一点点），改成 100% */
+  .aurora-full-width {
+    left: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+
+  /* 防止某些元素撑破屏幕 */
+  .aurora-page,
+  .aurora-hero,
+  .aurora-hero-bg,
+  .aurora-container,
+  .aurora-section {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+
+</style>
+
+<div class="aurora-wrapper aurora-full-width">
+  <div class="aurora-page">
+
+    <!-- HERO -->
+    <section id="women" class="aurora-hero">
+      <div class="aurora-hero-bg" id="aurora-hero-bg">
+        <div class="aurora-hero-inner">
+          <div class="aurora-container">
+            <div id="aurora-hero-slides">
+              <!-- Slide 1 -->
+              <div class="aurora-hero-slide" data-index="0"
+                   data-bg="https://cdn.shopify.com/s/files/1/0708/3393/0294/files/1F7470F3-FF7D-4630-9325-3390A1947CBB.png?v=1766881085">
+                <div class="aurora-hero-tag">CAPRICORN SEASON</div>
+                <h1 class="aurora-hero-title">Built to Stand the Test of Time</h1>
+                <p class="aurora-hero-subtitle">
+                  Not for wishing — but for standing firm, day after day.
+                </p>
+                <div class="aurora-hero-ctas">
+                  <button class="aurora-link-underline">For Long-Term Wear</button>
+                  <button class="aurora-link-underline secondary">For Daily Stability</button>
+                </div>
+                <div class="aurora-metrics">
+                  <div><span></span> Thoughtfully Selected Crystals</div>
+                  <div><span></span> Designed for Real-Life Pressure</div>
+                  <div><span></span> Made to Stay With You</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products -->
+        <!-- Products -->
+<section id="collections" class="aurora-section">
+  <div class="aurora-container">
+    <div class="aurora-products-header">
+      <h2 class="aurora-section-title">Capricorn Limited</h2>
+      <button class="aurora-text-link-pill">
+        All Collections <span style="font-size:18px; line-height:1;">›</span>
+      </button>
+    </div>
+
+    <div class="aurora-products-grid">
+
+      <!-- Product 1 -->
+      <div class="aurora-product-card">
+        <div class="aurora-imgmock aurora-imgmock--portrait" style="overflow:hidden;">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0708/3393/0294/files/2025-12-27_1.36.43.png?v=1766874373"
+            alt="Capricorn · Grounding"
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
+          />
+          <div class="aurora-badge">new</div>
+        </div>
+
+        <div class="aurora-product-meta">
+          <div class="aurora-product-meta-text">
+            <div class="aurora-tag">Bracelet</div>
+            <div class="aurora-product-name">Capricorn · Grounding</div>
+          </div>
+          <div class="aurora-product-price">$120</div>
+        </div>
+
+        <div class="aurora-product-actions">
+          <a class="aurora-primary-btn" href="https://xmemoria.co/products/私人订制">BUY NOW</a>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="aurora-product-card">
+        <div class="aurora-imgmock aurora-imgmock--portrait" style="overflow:hidden;">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0708/3393/0294/files/2025-12-27_1.30.49.png?v=1766874373"
+            alt="Capricorn · Boundary"
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
+          />
+          <div class="aurora-badge">new</div>
+        </div>
+
+        <div class="aurora-product-meta">
+          <div class="aurora-product-meta-text">
+            <div class="aurora-tag">Bracelet</div>
+            <div class="aurora-product-name">Capricorn · Boundary</div>
+          </div>
+          <div class="aurora-product-price">$120</div>
+        </div>
+
+        <div class="aurora-product-actions">
+          <a class="aurora-primary-btn" href="https://xmemoria.co/products/产品2">BUY NOW</a>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="aurora-product-card">
+        <div class="aurora-imgmock aurora-imgmock--portrait" style="overflow:hidden;">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0708/3393/0294/files/2025-12-26_2.24.23.png?v=1766874373"
+            alt="Capricorn · Discipline"
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
+          />
+        </div>
+
+        <div class="aurora-product-meta">
+          <div class="aurora-product-meta-text">
+            <div class="aurora-tag">Bracelet</div>
+            <div class="aurora-product-name">Capricorn · Discipline</div>
+          </div>
+          <div class="aurora-product-price">$120</div>
+        </div>
+
+        <div class="aurora-product-actions">
+          <a class="aurora-primary-btn" href="https://xmemoria.co/products/产品3">BUY NOW</a>
+        </div>
+      </div>
+
+    </div> <!-- ✅ aurora-products-grid 结束 -->
+  </div> <!-- ✅ aurora-container 结束 -->
+</section> <!-- ✅ products section 结束 -->
+  <!-- Classic Collection -->
+<section id="classic" class="aurora-section">
+  <div class="aurora-container">
+    <div class="aurora-products-header">
+      <h2 class="aurora-section-title">Classic Collection</h2>
+      <button class="aurora-text-link-pill">
+        All Collections <span style="font-size:18px; line-height:1;">›</span>
+      </button>
+    </div>
+
+    <div class="aurora-products-grid">
+
+      <!-- Classic 1 -->
+      <div class="aurora-product-card">
+        <div class="aurora-imgmock aurora-imgmock--portrait" style="overflow:hidden;">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0708/3393/0294/files/2025-12-27_1.36.43.png?v=1766874373"
+            alt="Classic · 1"
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
+          />
+          <div class="aurora-badge">classic</div>
+        </div>
+
+        <div class="aurora-product-meta">
+          <div class="aurora-product-meta-text">
+            <div class="aurora-tag">Bracelet</div>
+            <div class="aurora-product-name">Classic · 1</div>
+          </div>
+          <div class="aurora-product-price">$120</div>
+        </div>
+
+        <div class="aurora-product-actions">
+          <a class="aurora-primary-btn" href="https://xmemoria.co/products/私人订制">BUY NOW</a>
+        </div>
+      </div>
+
+      <!-- Classic 2 -->
+      <div class="aurora-product-card">
+        <div class="aurora-imgmock aurora-imgmock--portrait" style="overflow:hidden;">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0708/3393/0294/files/2025-12-27_1.30.49.png?v=1766874373"
+            alt="Classic · 2"
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
+          />
+          <div class="aurora-badge">classic</div>
+        </div>
+
+        <div class="aurora-product-meta">
+          <div class="aurora-product-meta-text">
+            <div class="aurora-tag">Bracelet</div>
+            <div class="aurora-product-name">Classic · 2</div>
+          </div>
+          <div class="aurora-product-price">$120</div>
+        </div>
+
+        <div class="aurora-product-actions">
+          <a class="aurora-primary-btn" href="https://xmemoria.co/products/产品2">BUY NOW</a>
+        </div>
+      </div>
+
+      <!-- Classic 3 -->
+      <div class="aurora-product-card">
+        <div class="aurora-imgmock aurora-imgmock--portrait" style="overflow:hidden;">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0708/3393/0294/files/2025-12-26_2.24.23.png?v=1766874373"
+            alt="Classic · 3"
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
+          />
+          <div class="aurora-badge">classic</div>
+        </div>
+
+        <div class="aurora-product-meta">
+          <div class="aurora-product-meta-text">
+            <div class="aurora-tag">Bracelet</div>
+            <div class="aurora-product-name">Classic · 3</div>
+          </div>
+          <div class="aurora-product-price">$120</div>
+        </div>
+
+        <div class="aurora-product-actions">
+          <a class="aurora-primary-btn" href="https://xmemoria.co/products/产品3">BUY NOW</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="aurora-footer">
+  <div class="aurora-container aurora-footer-inner">
+    <div class="aurora-footer-grid">
+      <div>
+        <div class="aurora-footer-brand">AURORA&nbsp;CRYSTAL</div>
+        <p class="aurora-footer-text">Subscribe to receive new arrivals and limited releases.</p>
+        <div class="aurora-footer-subscribe">
+          <input class="aurora-input" type="email" placeholder="Enter your Email">
+          <button class="aurora-primary-btn">Subscribe</button>
+        </div>
+      </div>
+      <div>
+        <div class="aurora-footer-column-title">Customer Service</div>
+        <ul class="aurora-footer-list">
+          <li>Order Tracking</li><li>Shipping & Returns</li><li>Care Guide</li>
+        </ul>
+      </div>
+      <div>
+        <div class="aurora-footer-column-title">About Us</div>
+        <ul class="aurora-footer-list">
+          <li>Our Story</li><li>Store Locator</li><li>Sustainability Commitment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="aurora-footer-bottom">
+    © <span id="aurora-year"></span> AURORA. All rights reserved.
+  </div>
+</footer>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var y = document.getElementById("aurora-year");
+    if (y) y.textContent = new Date().getFullYear();
+  });
+</script>
+
+
+{% schema %}
+{
+  "name": "Aurora 自定义首页",
+  "settings": []
+}
+{% endschema %}
+
+
